@@ -14,7 +14,7 @@ public class MyProjectUser : IdentityUser
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     [ForeignKey("ProjectModel")]
-    public int ProjectId { get; set; }
-    public ProjectModel Project { get; set; }
+    public int? ProjectId { get; set; }
+    public ProjectModel? Project { get; set; }
 }
 

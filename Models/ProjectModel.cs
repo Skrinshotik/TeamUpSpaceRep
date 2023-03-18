@@ -13,9 +13,13 @@ namespace CAMPUSproject.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string? ProjectName { get; set; }
+        [Required]
         public string? ShortDescription { get; set; }
+        [Required]
         public string? Description { get; set; }
+        [Required]
         public string? Category { get; set; }
         public ICollection<MyProjectUser?>? Users { get; set; }
 
