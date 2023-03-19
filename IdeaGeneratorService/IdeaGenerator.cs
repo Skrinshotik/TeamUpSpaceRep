@@ -11,7 +11,7 @@ namespace TeamUpSpace.IdeaGeneratorService
 {
 	public class IdeaGenerator
 	{
-		string apiKey = "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";
+		string apiKey = "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";
 		string model = "text-davinci-003";
 		string endPoint = "https://api.openai.com/v1/completions";
 		string context = "С этого момента ты профессиональный безнес тренер, который" +

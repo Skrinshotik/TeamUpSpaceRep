@@ -8,10 +8,7 @@
 }
 else
 {
-
     ViewData["Title"] = "Мой проект";
-
-
     <div class="row">
         <div class="col">
             <div>
@@ -19,6 +16,8 @@ else
                 <span>@Model.ShortDescription</span>
                 <br>
                 <span>@Model.Description</span>
+                <br>
+                @ViewBag.Idea;
                 <br>
                 <span>@Model.Category</span>
             </div>
