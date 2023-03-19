@@ -15,6 +15,11 @@ namespace TeamUpSpace.Controllers
 
         public IActionResult Index()
         {
+            IdeaGeneratorService.IdeaGenerator ideaGenerator = new IdeaGeneratorService.IdeaGenerator();
+            string idea = ideaGenerator.GetIdea().Result;
+            string name = ideaGenerator.GetIdeaName(idea).Result;
+            Console.WriteLine(name+"\n"+idea);
+
             return View();
         }
 

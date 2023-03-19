@@ -11,7 +11,7 @@ namespace TeamUpSpace.IdeaGeneratorService
 {
 	public class IdeaGenerator
 	{
-		string apiKey = "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";
+		string apiKey = "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";
 		string model = "text-davinci-003";
 		string endPoint = "https://api.openai.com/v1/completions";
 		string ideaContext = "С этого момента ты профессиональный безнес тренер, который" +
@@ -24,11 +24,13 @@ namespace TeamUpSpace.IdeaGeneratorService
 		string nameContext = "С этого момента ты гениальный креативщик, который всегда придумывает локаничные и красивые" +
 			" названия для проектов по их описанию. Ты не многословен, но крайне точен и хорош в своем деле." +
 			" Когда тебе присылают идею проекта, ты присылаешь одно название, которое прекрасно описывает проект" +
-			" и соответствует правилам нейминга проектов. Твоя задача придумать название для следующего проекта: ";
+			" и соответствует правилам нейминга проектов. Твоя задача придумать название длинной в одно слово на английском языке" +
+			" для следующего проекта: ";
 
 		public async Task<string> GetIdea()
 		{
-			string res = await this.GenerateResponse(ideaContext);
+			string res = GetContextWords();
+			res = await this.GenerateResponse(ideaContext+res);
 			return res;
 		}
 
@@ -38,9 +40,8 @@ namespace TeamUpSpace.IdeaGeneratorService
 			return res;
 		}
 
-		public async Task<string> GenerateResponse(string context)
+		private async Task<string> GenerateResponse(string context)
 		{
-			ideaContext += GetContextWords();
 			HttpClient client = new HttpClient();
 			try
 			{
@@ -48,7 +49,7 @@ namespace TeamUpSpace.IdeaGeneratorService
 
 				var body = new
 				{
-					prompt = ideaContext,
+					prompt = context,
 					model = model,
 					temperature = 0.8,
 					max_tokens = 1000,
@@ -84,15 +85,17 @@ namespace TeamUpSpace.IdeaGeneratorService
 
 
 		}
-		public string GetContextWords()
+		private string GetContextWords()
 		{
 			Verbs verbs = new Verbs();
 			Nouns nouns = new Nouns();
 			Adjectives adjectives = new Adjectives();
+			Extra extra = new Extra();
 
 			string result = "";
 
-			result += nouns.GetRandomNoun() + ", " + adjectives.GetRandomAdjective() + ", " + verbs.GetRandomVerb() + ", " +
+			result += extra.GetRandomExtra() + ", " +
+				nouns.GetRandomNoun() + ", " + adjectives.GetRandomAdjective() + ", " + verbs.GetRandomVerb() + ", " +
 				nouns.GetRandomNoun() + ", " + adjectives.GetRandomAdjective() + ", " + verbs.GetRandomVerb();
 
 			return result;
