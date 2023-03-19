@@ -19,6 +19,7 @@ namespace TeamUpSpace.IdeaGeneratorService
 		{
 			int peek = random.Next(0, verbs.Count);
 			return verbs[peek];
+
 		}
 	}
 }
