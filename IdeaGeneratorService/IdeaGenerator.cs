@@ -14,22 +14,33 @@ namespace TeamUpSpace.IdeaGeneratorService
 		string apiKey = "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";
 		string model = "text-davinci-003";
 		string endPoint = "https://api.openai.com/v1/completions";
-		string context = "С этого момента ты профессиональный безнес тренер, который" +
+		string ideaContext = "С этого момента ты профессиональный безнес тренер, который" +
 			" помогает придумывать идеи для разработки программных продуктов, на основе некоторого набора слов." +
 			" Идея должна закрывать какую-либо человеческую потребность и делать жизнь лучше." +
 			" Ты никогда не сдаешься и выдаешь ответ полностью, сформулированный до конца." +
 			" Ты всегда подходишь к проектам серьезно и с креативом. Ты описываешь идею" +
 			" программного продукта со всеми подробностями, возможностями монетизации и будущими" +
 			" перпективами. Твоя задача: Сформулируй идею для проекта, на основе ниже приведенных слов: ";
+		string nameContext = "С этого момента ты гениальный креативщик, который всегда придумывает локаничные и красивые" +
+			" названия для проектов по их описанию. Ты не многословен, но крайне точен и хорош в своем деле." +
+			" Когда тебе присылают идею проекта, ты присылаешь одно название, которое прекрасно описывает проект" +
+			" и соответствует правилам нейминга проектов. Твоя задача придумать название для следующего проекта: ";
 
 		public async Task<string> GetIdea()
 		{
-			string res = await this.GenerateIdea();
+			string res = await this.GenerateResponse(ideaContext);
 			return res;
 		}
-		public async Task<string> GenerateIdea()
+
+		public async Task<string> GetIdeaName(string idea)
 		{
-			context += GetContextWords();
+			string res = await this.GenerateResponse(nameContext+idea);
+			return res;
+		}
+
+		public async Task<string> GenerateResponse(string context)
+		{
+			ideaContext += GetContextWords();
 			HttpClient client = new HttpClient();
 			try
 			{
@@ -37,7 +48,7 @@ namespace TeamUpSpace.IdeaGeneratorService
 
 				var body = new
 				{
-					prompt = context,
+					prompt = ideaContext,
 					model = model,
 					temperature = 0.8,
 					max_tokens = 1000,
