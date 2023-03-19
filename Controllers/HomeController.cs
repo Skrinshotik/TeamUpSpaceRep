@@ -2,14 +2,6 @@
 using System.Diagnostics;
 using TeamUpSpace.Models;
 
-
-
-
-using TeamUpSpace.IdeaGeneratorService;
-
-
-
-
 namespace TeamUpSpace.Controllers
 {
     public class HomeController : Controller
@@ -23,9 +15,6 @@ namespace TeamUpSpace.Controllers
 
         public IActionResult Index()
         {
-
-            IdeaGenerator ideaGenerator = new IdeaGenerator();
-            ideaGenerator.GetIdea();
             return View();
         }
 
