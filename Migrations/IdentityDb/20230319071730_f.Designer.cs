@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace TeamUpSpace.Migrations.IdentityDb
 {
-    [DbContext(typeof(IdentityDbContext))]
-    [Migration("20230318140515_init34")]
-    partial class init34
+    [DbContext(typeof(MyIdentityDbContext))]
+    [Migration("20230319071730_f")]
+    partial class f
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace TeamUpSpace.Migrations.IdentityDb
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -96,34 +96,9 @@ namespace TeamUpSpace.Migrations.IdentityDb
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectModelId");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Category")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjectName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShortDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProjectModel");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -259,13 +234,43 @@ namespace TeamUpSpace.Migrations.IdentityDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProjectName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProjectModel");
+                });
+
             modelBuilder.Entity("CAMPUSproject.Areas.Identity.Data.MyProjectUser", b =>
                 {
-                    b.HasOne("CAMPUSproject.Models.ProjectModel", "Project")
+                    b.HasOne("TeamUpSpace.Models.ProjectModel", "Project")
                         .WithMany("Users")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectModelId");
 
                     b.Navigation("Project");
                 });
@@ -321,7 +326,7 @@ namespace TeamUpSpace.Migrations.IdentityDb
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
                 {
                     b.Navigation("Users");
                 });

@@ -6,25 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TeamUpSpace.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class ff : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Projects",
+                name: "GetProjects",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShortDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.PrimaryKey("PK_GetProjects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,7 +35,7 @@ namespace TeamUpSpace.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    ProjectModelId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -54,17 +55,16 @@ namespace TeamUpSpace.Migrations
                 {
                     table.PrimaryKey("PK_MyProjectUser", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MyProjectUser_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_MyProjectUser_GetProjects_ProjectModelId",
+                        column: x => x.ProjectModelId,
+                        principalTable: "GetProjects",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MyProjectUser_ProjectId",
+                name: "IX_MyProjectUser_ProjectModelId",
                 table: "MyProjectUser",
-                column: "ProjectId");
+                column: "ProjectModelId");
         }
 
         /// <inheritdoc />
@@ -74,7 +74,7 @@ namespace TeamUpSpace.Migrations
                 name: "MyProjectUser");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "GetProjects");
         }
     }
 }

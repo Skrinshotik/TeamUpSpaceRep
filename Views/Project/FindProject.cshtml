@@ -1,0 +1,8 @@
+﻿@using TeamUpSpace.Models;
+@model IEnumerable<ProjectModel>
+
+<h1>Поиск</h1>
+@foreach(var item in Model)
+{
+    <p>@item.ProjectName</p>
+}

@@ -7,11 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CAMPUSproject.Models
+namespace TeamUpSpace.Models
 {
     public class ProjectModel
     {
-        [Key]
         public int Id { get; set; }
         [Required]
         public string? ProjectName { get; set; }
@@ -21,7 +20,9 @@ namespace CAMPUSproject.Models
         public string? Description { get; set; }
         [Required]
         public string? Category { get; set; }
-        public ICollection<MyProjectUser?>? Users { get; set; }
+        [ForeignKey("MyProjectUser")]
+        public string? UserId { get; set; }
+        public ICollection<MyProjectUser>? Users { get; set; } = new List<MyProjectUser>();
 
     }
 }

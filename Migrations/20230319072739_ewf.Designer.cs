@@ -12,8 +12,8 @@ using TeamUpSpace.Models;
 namespace TeamUpSpace.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20230318135428_init")]
-    partial class init
+    [Migration("20230319072739_ewf")]
+    partial class ewf
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,7 @@ namespace TeamUpSpace.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -83,12 +83,12 @@ namespace TeamUpSpace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectModelId");
 
                     b.ToTable("MyProjectUser");
                 });
 
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,34 +97,39 @@ namespace TeamUpSpace.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProjectName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("GetProjects");
                 });
 
             modelBuilder.Entity("CAMPUSproject.Areas.Identity.Data.MyProjectUser", b =>
                 {
-                    b.HasOne("CAMPUSproject.Models.ProjectModel", "Project")
+                    b.HasOne("TeamUpSpace.Models.ProjectModel", "Project")
                         .WithMany("Users")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectModelId");
 
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
                 {
                     b.Navigation("Users");
                 });

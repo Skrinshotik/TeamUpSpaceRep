@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace TeamUpSpace.Migrations.IdentityDb
+namespace TeamUpSpace.Migrations
 {
     /// <inheritdoc />
-    public partial class init34 : Migration
+    public partial class ewf : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

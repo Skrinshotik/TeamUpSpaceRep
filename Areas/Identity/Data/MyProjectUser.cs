@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CAMPUSproject.Models;
 using Microsoft.AspNetCore.Identity;
+using TeamUpSpace.Models;
 
 namespace CAMPUSproject.Areas.Identity.Data;
 
@@ -14,7 +15,6 @@ public class MyProjectUser : IdentityUser
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
     [ForeignKey("ProjectModel")]
-    public int? ProjectId { get; set; }
+    public int? ProjectModelId { get; set; }
     public ProjectModel? Project { get; set; }
 }
-

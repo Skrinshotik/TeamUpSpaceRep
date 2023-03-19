@@ -9,13 +9,13 @@ using TeamUpSpace.Models;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("IndentityDbContextContextConnection") ?? throw new InvalidOperationException("Connection string 'IndentityDbContextContextConnection' not found.");
 
-builder.Services.AddDbContext<CAMPUSproject.Data.IdentityDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<CAMPUSproject.Data.MyIdentityDbContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<ProjectDbContext>(options =>
 options.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<MyProjectUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-        .AddEntityFrameworkStores<CAMPUSproject.Data.IdentityDbContext>()
+        .AddEntityFrameworkStores<CAMPUSproject.Data.MyIdentityDbContext>()
         .AddDefaultTokenProviders()
         .AddDefaultUI();
 
