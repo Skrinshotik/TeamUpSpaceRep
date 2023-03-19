@@ -22,14 +22,14 @@
 				};
 		private int seed;
 		private Random random;
-		public Extra()
+		public Extra(Random rand)
 		{
-			seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-			random = new Random(seed);
+			random = rand;
 		}
 		public string GetRandomExtra()
 		{
-			return extra[random.Next(0, extra.Count)];
+			int peek = random.Next(0, extra.Count);
+			return extra[peek];
 		}
 	}
 }

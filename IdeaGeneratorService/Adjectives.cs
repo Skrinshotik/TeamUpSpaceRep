@@ -9,15 +9,15 @@
 			"яростный", "спокойный", "радостный", "грустный" };
 		private int seed;
 		private Random random;
-		public Adjectives()
+		public Adjectives(Random rand)
 		{
-			seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-			random = new Random(seed);
+			random = rand;
 		}
 
 		public string GetRandomAdjective()
 		{
-			return adjectives[random.Next(0,adjectives.Count)];
+			int peek = random.Next(0, adjectives.Count);
+			return adjectives[peek];
 		}
 	}
 }

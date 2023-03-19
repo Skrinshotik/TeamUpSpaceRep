@@ -11,10 +11,9 @@ namespace TeamUpSpace.IdeaGeneratorService
 			"спать", "просыпаться", "одеваться", "раздеваться", "мыться", "чистить", "убирать" };
 		private int seed;
 		private Random random;
-		public Verbs()
+		public Verbs(Random rand)
 		{
-			seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-			random = new Random(seed);
+			random = rand;
 		}
 		public string GetRandomVerb()
 		{

@@ -87,10 +87,12 @@ namespace TeamUpSpace.IdeaGeneratorService
 		}
 		private string GetContextWords()
 		{
-			Verbs verbs = new Verbs();
-			Nouns nouns = new Nouns();
-			Adjectives adjectives = new Adjectives();
-			Extra extra = new Extra();
+			int seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+			Random random = new Random(seed);
+			Verbs verbs = new Verbs(random);
+			Nouns nouns = new Nouns(random);
+			Adjectives adjectives = new Adjectives(random);
+			Extra extra = new Extra(random);
 
 			string result = "";
 
