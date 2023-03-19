@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using TeamUpSpace.IdeaGeneratorService;
 using TeamUpSpace.Models;
 
 namespace CAMPUSproject.Controllers
@@ -15,6 +16,7 @@ namespace CAMPUSproject.Controllers
     [Authorize]
     public class ProjectController : Controller
     {
+        private IdeaGenerator generator;
         private ProjectDbContext db;
         private readonly UserManager<MyProjectUser> manager;
         private MyIdentityDbContext identityDb;
@@ -53,6 +55,7 @@ namespace CAMPUSproject.Controllers
 
         public async Task<IActionResult> ProjectDetails()
         {
+            generator = new();
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(userId);
             var project = await db.GetProjects.Where(x=>x.UserId==userId).Include(u => u.Users).FirstOrDefaultAsync();
@@ -68,7 +71,8 @@ namespace CAMPUSproject.Controllers
                 ViewBag.Title = "У вас пока еще нет проекта";
                 return View();
             }
-            
+            ViewBag.Idea = string.Empty;
+            ViewBag.Idea = (string)await generator.GetIdea();
             return View(project);
         }
 
