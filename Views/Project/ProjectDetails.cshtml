@@ -11,15 +11,30 @@ else
     ViewData["Title"] = "Мой проект";
     <div class="row">
         <div class="col">
+            <div class="card p-4" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.ProjectName</h5>
+                    <p class="">
+                        <span>@Model.Description</span>
+                    </p>
+                </div>
+            </div>
             <div>
-                <h1>@Model.ProjectName</h1>
-                <span>@Model.ShortDescription</span>
-                <br>
-                <span>@Model.Description</span>
-                <br>
-                @ViewBag.Idea;
+
+
                 <br>
                 <span>@Model.Category</span>
+
+                <div class="d-flex">
+                    <form method="post">
+                        <input type="hidden" value="true" name="Regenerate">
+                        <button type="submit" class="btn btn-primary me-2">Создать описание</button>
+                    </form>
+
+                    <a class="btn btn-secondary">Управление</a>
+                    <br>
+                </div>
+
             </div>
         </div>
         <div class="col">
@@ -29,10 +44,9 @@ else
                 <p>@item.Email</p>
             }
         </div>
-        
+
     </div>
     <div>
-        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-        <a asp-controller="Home" asp-action="Index">Back to List</a>
+        <a asp-controller="Home" asp-action="Index">Назад</a>
     </div>
 }

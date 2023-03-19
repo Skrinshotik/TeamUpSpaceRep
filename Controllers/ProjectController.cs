@@ -37,7 +37,7 @@ namespace CAMPUSproject.Controllers
         {
             var Userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(Userid);
-            if(user.ProjectModelId != null)
+            if (user.ProjectModelId != null)
             {
                 return RedirectToAction("Index", "Home");
 
@@ -48,18 +48,32 @@ namespace CAMPUSproject.Controllers
             project.Users.Add(user);
             db.GetProjects.Add(project);
             await db.SaveChangesAsync();
-           
+
 
             return RedirectToAction("Index", "Home");
         }
-
         public async Task<IActionResult> ProjectDetails()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await manager.FindByIdAsync(userId);
+            var project = await db.GetProjects.Where(x => x.UserId == userId).Include(u => u.Users).FirstOrDefaultAsync();
+            if (project is null)
+            {
+                ViewBag.Title = "У вас пока еще нет проекта";
+                return View();
+            }
+            var users = project.Users.Where(x => x.ProjectModelId == project.Id).Select(x => x).ToList();
+            project.Users = users;
+            return View(project);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ProjectDetails(bool Regenerate)
         {
             generator = new();
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(userId);
-            var project = await db.GetProjects.Where(x=>x.UserId==userId).Include(u => u.Users).FirstOrDefaultAsync();
-            if(project is null)
+            var project = await db.GetProjects.Where(x => x.UserId == userId).Include(u => u.Users).FirstOrDefaultAsync();
+            if (project is null)
             {
                 ViewBag.Title = "У вас пока еще нет проекта";
                 return View();
@@ -71,8 +85,13 @@ namespace CAMPUSproject.Controllers
                 ViewBag.Title = "У вас пока еще нет проекта";
                 return View();
             }
-            ViewBag.Idea = string.Empty;
-            ViewBag.Idea = (string)await generator.GetIdea();
+            if (Regenerate)
+            {
+                project.Description = string.Empty;
+                project.Description = await generator.GetIdea();
+            }
+            db.GetProjects.Update(project);
+            await db.SaveChangesAsync();
             return View(project);
         }
 
@@ -85,13 +104,14 @@ namespace CAMPUSproject.Controllers
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(userId);
-            if(db.GetProjects.Any(x => x.UserId == userId))
+            if (db.GetProjects.Any(x => x.UserId == userId))
             {
                 return RedirectToAction(nameof(ProjectDetails));
             }
             var projects = await db.GetProjects.Distinct().ToListAsync();
             var project = projects.First();
             List<MyProjectUser> users = new List<MyProjectUser>();
+            user.ProjectModelId = project.Id;
             users.Add(user);
             await db.SaveChangesAsync();
             return View(projects);
