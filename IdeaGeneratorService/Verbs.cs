@@ -1,4 +1,6 @@
-﻿namespace TeamUpSpace.IdeaGeneratorService
+﻿using System;
+
+namespace TeamUpSpace.IdeaGeneratorService
 {
 	public class Verbs
 	{
@@ -7,11 +9,15 @@
 			"сидеть", "лежать", "работать", "учиться", "учить", "научить", "обучать", "запоминать", "забывать", 
 			"принимать", "давать", "получать", "покупать", "продавать", "заказывать", "готовить", "есть", "пить",
 			"спать", "просыпаться", "одеваться", "раздеваться", "мыться", "чистить", "убирать" };
-
+		private int seed;
+		private Random random;
+		public Verbs()
+		{
+			seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+			random = new Random(seed);
+		}
 		public string GetRandomVerb()
 		{
-			int seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-			Random random = new Random(seed);
 			return verbs[random.Next(0, verbs.Count)];
 		}
 	}

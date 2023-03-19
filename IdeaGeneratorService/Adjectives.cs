@@ -7,11 +7,16 @@
 			"яркий", "тусклый", "высокий", "низкий", "длинный", "короткий", "широкий", "узкий", "гладкий", "шершавый",
 			"прочный", "хрупкий", "толстый", "тонкий", "большой", "маленький", "громкий", "тихий", "бесшумный", "безмолвный",
 			"яростный", "спокойный", "радостный", "грустный" };
+		private int seed;
+		private Random random;
+		public Adjectives()
+		{
+			seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+			random = new Random(seed);
+		}
 
 		public string GetRandomAdjective()
 		{
-			int seed = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-			Random random = new Random(seed);
 			return adjectives[random.Next(0,adjectives.Count)];
 		}
 	}
