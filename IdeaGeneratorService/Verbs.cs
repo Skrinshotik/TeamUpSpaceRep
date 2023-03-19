@@ -17,7 +17,8 @@ namespace TeamUpSpace.IdeaGeneratorService
 		}
 		public string GetRandomVerb()
 		{
-			return verbs[random.Next(0, verbs.Count)];
+			int peek = random.Next(0, verbs.Count);
+			return verbs[peek];
 		}
 	}
 }
