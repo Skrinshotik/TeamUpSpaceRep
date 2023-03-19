@@ -1,6 +1,7 @@
 using CAMPUSproject.Areas.Identity.Data;
 using CAMPUSproject.Data;
 using CAMPUSproject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,13 @@ using TeamUpSpace.Models;
 
 namespace CAMPUSproject.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
         private ProjectDbContext db;
         private readonly UserManager<MyProjectUser> manager;
-        private IdentityDbContext identityDb;
-        public ProjectController(ProjectDbContext db, UserManager<MyProjectUser> manager, IdentityDbContext identityDb)
+        private MyIdentityDbContext identityDb;
+        public ProjectController(ProjectDbContext db, UserManager<MyProjectUser> manager, MyIdentityDbContext identityDb)
         {
             this.db = db;
             this.manager = manager;
@@ -33,17 +35,18 @@ namespace CAMPUSproject.Controllers
         {
             var Userid = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(Userid);
+            if(user.ProjectModelId != null)
+            {
+                return RedirectToAction("Index", "Home");
 
-            db.Projects.Add(project);
+            }
+            project.UserId = user.Id;
+            user.Project = new ProjectModel();
+            user.ProjectModelId = project.Id;
+            project.Users.Add(user);
+            db.GetProjects.Add(project);
             await db.SaveChangesAsync();
-            //var id = await db.Projects
-            //    .Where(x => x.ProjectName == project.ProjectName)
-            //    .Where(x => x.Category == project.Description)
-            //    .Select(x => x.Id)
-            //    .FirstOrDefaultAsync();
-            user.Project = project;
-            identityDb.Users.Update(user);
-            await db.SaveChangesAsync();
+           
 
             return RedirectToAction("Index", "Home");
         }
@@ -52,14 +55,42 @@ namespace CAMPUSproject.Controllers
         {
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var user = await manager.FindByIdAsync(userId);
-            var project = await db.Projects.Include(u => u.Users).FirstOrDefaultAsync();
+            var project = await db.GetProjects.Where(x=>x.UserId==userId).Include(u => u.Users).FirstOrDefaultAsync();
+            if(project is null)
+            {
+                ViewBag.Title = "У вас пока еще нет проекта";
+                return View();
+            }
+            var users = project.Users.Where(x => x.ProjectModelId == project.Id).Select(x => x).ToList();
+            project.Users = users;
             if (project.Users is null)
             {
                 ViewBag.Title = "У вас пока еще нет проекта";
                 return View();
             }
+            
+            return View(project);
+        }
 
-            return View();
+        public async Task<IActionResult> AddToProject(int ProjectId)
+        {
+            return View(await identityDb.Users.ToListAsync());
+        }
+
+        public async Task<IActionResult> FindProject()
+        {
+            string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var user = await manager.FindByIdAsync(userId);
+            if(db.GetProjects.Any(x => x.UserId == userId))
+            {
+                return RedirectToAction(nameof(ProjectDetails));
+            }
+            var projects = await db.GetProjects.Distinct().ToListAsync();
+            var project = projects.First();
+            List<MyProjectUser> users = new List<MyProjectUser>();
+            users.Add(user);
+            await db.SaveChangesAsync();
+            return View(projects);
         }
     }
 }

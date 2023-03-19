@@ -12,8 +12,8 @@ using TeamUpSpace.Models;
 namespace TeamUpSpace.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20230318145318_init29")]
-    partial class init29
+    [Migration("20230319071713_ff")]
+    partial class ff
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,7 @@ namespace TeamUpSpace.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProjectId")
+                    b.Property<int?>("ProjectModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
@@ -83,12 +83,12 @@ namespace TeamUpSpace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("ProjectModelId");
 
                     b.ToTable("MyProjectUser");
                 });
 
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,21 +112,24 @@ namespace TeamUpSpace.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("GetProjects");
                 });
 
             modelBuilder.Entity("CAMPUSproject.Areas.Identity.Data.MyProjectUser", b =>
                 {
-                    b.HasOne("CAMPUSproject.Models.ProjectModel", "Project")
+                    b.HasOne("TeamUpSpace.Models.ProjectModel", "Project")
                         .WithMany("Users")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectModelId");
 
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("CAMPUSproject.Models.ProjectModel", b =>
+            modelBuilder.Entity("TeamUpSpace.Models.ProjectModel", b =>
                 {
                     b.Navigation("Users");
                 });

@@ -1,0 +1,39 @@
+﻿@using TeamUpSpace.Models;
+@model ProjectModel
+
+@if (Model is null)
+{
+    ViewData["Title"] = "Пока что у вас нет проекта";
+    <h1>Пока что у вас нет проекта</h1>
+}
+else
+{
+
+    ViewData["Title"] = "Мой проект";
+
+
+    <div class="row">
+        <div class="col">
+            <div>
+                <h1>@Model.ProjectName</h1>
+                <span>@Model.ShortDescription</span>
+                <br>
+                <span>@Model.Description</span>
+                <br>
+                <span>@Model.Category</span>
+            </div>
+        </div>
+        <div class="col">
+            <h1>Кто в проетке?</h1>
+            @foreach (var item in Model.Users)
+            {
+                <p>@item.Email</p>
+            }
+        </div>
+        
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-controller="Home" asp-action="Index">Back to List</a>
+    </div>
+}

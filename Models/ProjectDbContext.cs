@@ -11,12 +11,19 @@ namespace TeamUpSpace.Models
 {
     public class ProjectDbContext : DbContext
     {
-        public DbSet<ProjectModel> Projects { get; set; }
         public ProjectDbContext(DbContextOptions<ProjectDbContext> options)
                : base(options)
         {
             Database.EnsureCreated();
         }
-        
+        public DbSet<ProjectModel> GetProjects { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<ProjectModel>()
+                 .HasMany(u => u.Users);
+        }
+
+
     }
 }

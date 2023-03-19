@@ -7,9 +7,9 @@ using System.Reflection.Emit;
 
 namespace CAMPUSproject.Data;
 
-public class IdentityDbContext : IdentityDbContext<MyProjectUser>
+public class MyIdentityDbContext : IdentityDbContext<MyProjectUser>
 {
-    public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
+    public MyIdentityDbContext(DbContextOptions<MyIdentityDbContext> options)
         : base(options)
     {
     }
@@ -21,10 +21,6 @@ public class IdentityDbContext : IdentityDbContext<MyProjectUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
         builder.ApplyConfiguration(new UserEntityConfiguration());
-        builder.Entity<MyProjectUser>()
-        .HasOne(u => u.Project)
-        .WithMany(p => p.Users)
-        .HasForeignKey(u => u.ProjectId);
 
     }
 
