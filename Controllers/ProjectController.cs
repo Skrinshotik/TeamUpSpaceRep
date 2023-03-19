@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using TeamUpSpace.IdeaGeneratorService;
@@ -67,7 +68,7 @@ namespace CAMPUSproject.Controllers
             return View(project);
         }
         [HttpPost]
-        public async Task<IActionResult> ProjectDetails(bool Regenerate)
+        public async Task<IActionResult> ProjectDetails(bool Regenerate, bool RegenerateName)
         {
             generator = new();
             string? userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -89,6 +90,15 @@ namespace CAMPUSproject.Controllers
             {
                 project.Description = string.Empty;
                 project.Description = await generator.GetIdea();
+                
+            }
+            if(project.Description is null)
+            {
+                return RedirectToAction("ProjectDetails");
+            }
+            if(RegenerateName)
+            {
+                project.ProjectName = await generator.GetIdeaName(project.Description);
             }
             db.GetProjects.Update(project);
             await db.SaveChangesAsync();
@@ -111,7 +121,7 @@ namespace CAMPUSproject.Controllers
             var projects = await db.GetProjects.Distinct().ToListAsync();
             var project = projects.First();
             List<MyProjectUser> users = new List<MyProjectUser>();
-            user.ProjectModelId = project.Id;
+            project.UserId = user.Id; 
             users.Add(user);
             await db.SaveChangesAsync();
             return View(projects);

@@ -20,3 +20,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.bg-overlay {
+    background: linear-gradient(136.31deg, #270036 14.16%, #4F008B 54.83%, #4C24B1 82.63%);
+}

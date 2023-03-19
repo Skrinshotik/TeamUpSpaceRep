@@ -1,6 +1,12 @@
 ﻿@using TeamUpSpace.Models;
 @model ProjectModel
-
+<style>
+    .mycenter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
 @if (Model is null)
 {
     ViewData["Title"] = "Пока что у вас нет проекта";
@@ -8,45 +14,77 @@
 }
 else
 {
-    ViewData["Title"] = "Мой проект";
-    <div class="row">
+    <div class="row align-items-stretch mb-5">
+        <div class="col mycenter">
+            <h1 class="display-2 fw-bold">Мой проект</h1>
+        </div>
         <div class="col">
-            <div class="card p-4" style="width: 100%;">
-                <div class="card-body">
-                    <h5 class="card-title">@Model.ProjectName</h5>
+            <img src="~/img/superTeam.svg" class="img-fluid h-100" />
+        </div>
+
+    </div>
+    <div class="card p-4 rounded-2" style="width: 100%;">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+
+                    <h1 class="card-title">@Model.ProjectName</h1>
                     <p class="">
-                        <span>@Model.Description</span>
+                        @Model.Description
                     </p>
-                </div>
-            </div>
-            <div>
 
 
-                <br>
-                <span>@Model.Category</span>
 
-                <div class="d-flex">
-                    <form method="post">
-                        <input type="hidden" value="true" name="Regenerate">
-                        <button type="submit" class="btn btn-primary me-2">Создать описание</button>
-                    </form>
-
-                    <a class="btn btn-secondary">Управление</a>
                     <br>
+                    <span>@Model.Category</span>
+
+                    <div class="d-flex">
+                        <a class="btn btn-warning me-2" asp-controller="Home" asp-action="Index">Назад</a>
+
+                        <form method="post">
+                            <input type="hidden" value="true" name="Regenerate">
+                            <button type="submit" class="btn btn-primary me-2">Создать описание</button>
+                        </form>
+                        @if (Model.Description is not null)
+                        {
+                            <form method="post">
+                                <input type="hidden" value="true" name="RegenerateName">
+                                <button type="submit" class="btn btn-success me-2">Создать название</button>
+                            </form>
+                        }
+
+                        <a class="btn btn-secondary">Управление</a>
+                        <br>
+                    </div>
                 </div>
 
+
+                <div class="col">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 5px" width="16" height="16" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                        </svg>&thinsp; Кто в проетке?
+                    </h4>
+                    <div class="mt-4">
+                        @foreach (var item in Model.Users)
+                        {
+                            <p>
+                                <span class="bg-overlay p-2 m-3 rounded-2 text-light fw-regular">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                    </svg>&thinsp; @item.Email
+                                </span>
+                            </p>
+
+                        }
+                    </div>
+
+                </div>
             </div>
         </div>
-        <div class="col">
-            <h1>Кто в проетке?</h1>
-            @foreach (var item in Model.Users)
-            {
-                <p>@item.Email</p>
-            }
-        </div>
-
     </div>
     <div>
-        <a asp-controller="Home" asp-action="Index">Назад</a>
     </div>
+
 }
